@@ -10,17 +10,11 @@ from .admin import (
 
 
 class ModelPermission(BasePermission):
-    """This permission controls the type of endpoints: /projects/{id}/issues/ or /projects/{id}/issues/{id}.
-    - get_queryset method already checks permission for GET method.
-    - "POST" method is needed to check permission for the nested relationship in the endpoint.
-    - PUT/DELETE methods are needed to check permission because only author of an issue can do these actions.
-    """
-
-    message = 'Adding/Modifying/Deleting client is restricted to the member of sales team.'
+    """To take the same permissions defined in admin configuration for a given model."""
 
     def __init__(self, model_admin_config=None):
         super(ModelPermission, self).__init__()
-        self.model_admin_config = model_admin_config
+        self.model_admin_config = model_admin_config  # admin configuration for the model named "model"
 
     def has_permission(self, request, view):
         """
@@ -47,3 +41,13 @@ class ModelPermission(BasePermission):
 class ClientPermission(ModelPermission):
     def __init__(self):
         super(ClientPermission, self).__init__(model_admin_config=ClientAdminConfig)
+
+
+class ContractPermission(ModelPermission):
+    def __init__(self):
+        super(ContractPermission, self).__init__(model_admin_config=ContractAdminConfig)
+
+
+class EventPermission(ModelPermission):
+    def __init__(self):
+        super(EventPermission, self).__init__(model_admin_config=EventAdminConfig)

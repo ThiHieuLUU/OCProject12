@@ -3,10 +3,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status, mixins
 from rest_framework.response import Response
-from django.db.utils import IntegrityError
-from .exceptions import UniqueConstraint
-
-from rest_framework.permissions import DjangoModelPermissions
 
 from .models import (
     User,
@@ -20,7 +16,8 @@ from .serializers import (
     EventSerializer,
 )
 
-from .permissions import ClientPermission
+from .permissions import ClientPermission, ContractPermission, EventPermission
+from .admin import ClientAdminConfig, ContractAdminConfig, EventAdminConfig
 
 
 class ClientViewSet(viewsets.ModelViewSet):
@@ -30,9 +27,14 @@ class ClientViewSet(viewsets.ModelViewSet):
 
     serializer_class = ClientSerializer
     permission_classes = [ClientPermission]
-    queryset = Client.objects.all()
+    # queryset = Client.objects.all()
+
+    def get_queryset(self):
+        """Define a set of clients that the authenticated user can access."""
+        return ClientAdminConfig.get_queryset(self, self.request)
 
     def create(self, request, *args, **kwargs):
+        """Create a client."""
 
         # Pop all read-only data
         data = request.data
@@ -45,6 +47,8 @@ class ClientViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
+        """Update a client."""
+
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
 
@@ -65,10 +69,14 @@ class ContractViewSet(viewsets.ModelViewSet):
     A viewset for viewing and editing contract instances.
     """
     serializer_class = ContractSerializer
-    queryset = Contract.objects.all()
+    permission_classes = [ContractPermission]
+
+    def get_queryset(self):
+        """Define a set of contracts that the authenticated user can access."""
+        return ContractAdminConfig.get_queryset(self, self.request)
 
     def create(self, request, *args, **kwargs):
-        """Create a contract"""
+        """Create a contract."""
 
         # Pop all read-only data
         data = request.data
@@ -85,6 +93,8 @@ class ContractViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
+        """Update a contract."""
+
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
 
@@ -106,13 +116,17 @@ class ContractViewSet(viewsets.ModelViewSet):
 
 class EventViewSet(viewsets.ModelViewSet):
     """
-    A viewset for viewing and editing contract instances.
+    A viewset for viewing and editing event instances.
     """
     serializer_class = EventSerializer
-    queryset = Event.objects.all()
+    permission_classes = [EventPermission]
+
+    def get_queryset(self):
+        """Define a set of events that the authenticated user can access."""
+        return EventAdminConfig.get_queryset(self, self.request)
 
     def create(self, request, *args, **kwargs):
-        """Create a contract"""
+        """Create an event."""
 
         # Pop all read-only data
         data = request.data
@@ -128,6 +142,8 @@ class EventViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
+        """Update an event."""
+
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
 
