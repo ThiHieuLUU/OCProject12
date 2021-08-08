@@ -1,14 +1,13 @@
 """API Views for different requests about user, project, issue and comment.
 """
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, status, mixins
+from rest_framework import viewsets
 from rest_framework.response import Response
 
 from .models import (
     User,
     Client,
     Contract,
-    Event,
 )
 from .serializers import (
     ClientSerializer,
