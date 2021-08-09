@@ -42,8 +42,8 @@ class ContractSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Contract
-        fields = ['id', 'client', 'sales_contact', 'is_signed', 'amount', 'payment_due']
-        read_only_fields = ['id']
+        fields = ['id', 'client', 'sales_contact', 'is_signed', 'amount', 'payment_due', 'date_created']
+        read_only_fields = ['id', 'date_created']
 
 
 class EventSerializer(serializers.ModelSerializer):
