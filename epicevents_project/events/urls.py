@@ -21,7 +21,7 @@ clients_router.register(r'contracts', ContractViewSet, basename='contracts')
 # Generate:/clients/{client_pk}/contracts/{contract_pk}/events/
 # Generate:/clients/{client_pk}/contracts/{contract_pk}/events/{event_pk}
 contracts_router = routers.NestedSimpleRouter(clients_router, r'contracts', lookup='contract')
-contracts_router.register(r'events', EventViewSet, basename='events')
+contracts_router.register(r'event', EventViewSet, basename='event')
 
 urlpatterns = [
     path('', include(router.urls)),

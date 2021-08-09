@@ -38,7 +38,7 @@ class ClientSerializer(serializers.ModelSerializer):
 class ContractSerializer(serializers.ModelSerializer):
     """Serializer is used for a contract."""
     sales_contact = UserSerializer(read_only=True)  # read_only=True whenever having a foreign key
-    client = UserSerializer(read_only=True)
+    client = ClientSerializer(read_only=True)
 
     class Meta:
         model = Contract
