@@ -26,16 +26,13 @@ schema_view = get_schema_view(
         license=openapi.License(name="BSD License"),
     ),
     public=True,
-    permission_classes=(permissions.AllowAny, ),
+    permission_classes=(permissions.AllowAny,),
 )
+
 
 def trigger_error(request):
     division_by_zero = 1 / 0
 
-# urlpatterns = [
-#     path('sentry-debug/', trigger_error),
-#     # ...
-# ]
 
 urlpatterns = [
     re_path(

@@ -1,11 +1,9 @@
 """API Views for different requests about user, project, issue and comment.
 """
-# from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, mixins
 from rest_framework.response import Response
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from django.db import IntegrityError
-from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 

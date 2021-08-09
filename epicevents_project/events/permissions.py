@@ -1,7 +1,4 @@
-from django.shortcuts import get_object_or_404
 from rest_framework.permissions import BasePermission, SAFE_METHODS
-from .models import Client
-from rest_framework.exceptions import APIException
 from .admin import (
     ClientAdminConfig,
     ContractAdminConfig,

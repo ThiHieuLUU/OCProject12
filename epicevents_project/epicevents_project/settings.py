@@ -26,26 +26,6 @@ sentry_sdk.init(
     send_default_pii=True
 )
 
-# sentry_sdk.init(
-#     dsn="https://examplePublicKey@o0.ingest.sentry.io/0",
-#     integrations=[DjangoIntegration()],
-#
-#     # Set traces_sample_rate to 1.0 to capture 100%
-#     # of transactions for performance monitoring.
-#     # We recommend adjusting this value in production,
-#     traces_sample_rate=1.0,
-#
-#     # If you wish to associate users to errors (assuming you are using
-#     # django.contrib.auth) you may enable sending PII data.
-#     send_default_pii=True,
-#
-#     # By default the SDK will try to use the SENTRY_RELEASE
-#     # environment variable, or infer a git commit
-#     # SHA as release, however you may want to set
-#     # something more human-readable.
-#     # release="myapp@1.0.0",
-# )
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -58,6 +38,7 @@ SECRET_KEY = 'django-insecure-toua_ai3qkcjgi_5zgo_1-11hjgcxn#!&q#3ps=t1a4n!#**#a
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
+# To use sentry, set DEBUG = False and ALLOWED_HOSTS = ['127.0.0.1']
 DEBUG = False
 ALLOWED_HOSTS = ['127.0.0.1']
 
