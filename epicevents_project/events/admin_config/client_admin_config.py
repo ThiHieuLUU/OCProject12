@@ -1,3 +1,5 @@
+"""Configuration setup for admin page in order to allow who can access and perform CRUD operators on Client model."""
+
 from django.db.models import Q
 from django.contrib import admin
 from ..models import (
@@ -12,9 +14,13 @@ from ..user_role import (
 
 
 class ClientAdminConfig(admin.ModelAdmin):
+    """Set view and CRUD permissions over the Client module for an authenticated user in the admin page.
+    A superuser or a manager has all permissions.
+    Any seller can create (add) a client but only the main sales contact (main seller of this client) can update and
+    delete this client.
+    """
+
     model = Client
-    """Any seller can create (add) a client but only the main sales contact (main seller of this client) can update and
-    delete this client """
 
     def get_queryset(self, request):
         """Sellers, supporters can see theirs own clients."""
@@ -64,6 +70,9 @@ class ClientAdminConfig(admin.ModelAdmin):
 
     @superuser_or_manager_permission
     def has_module_permission(self, request):
+        """Superuser, member of Managers group can see the Client model.
+        Member of Sellers group and Supporters group also can see this.
+        """
         if request.user.groups.filter(name__in=['Sellers', 'Supporters']).exists():
             return True
         return False

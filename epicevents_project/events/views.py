@@ -23,9 +23,7 @@ from .filters import ClientFilter, ContractFilter, EventFilter
 
 
 class ClientViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
-    """
-    A viewset for viewing and editing client instances.
-    """
+    """A viewset for viewing and editing client instances."""
 
     serializer_class = ClientSerializer
     permission_classes = [ClientPermission]
@@ -75,9 +73,8 @@ class ClientViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
 
 class ContractViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
-    """
-    A viewset for viewing and editing contract instances.
-    """
+    """ A viewset for viewing and editing contract instances."""
+
     serializer_class = ContractSerializer
     permission_classes = [ContractPermission]
     filterset_class = ContractFilter
@@ -151,17 +148,15 @@ class ContractViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
 
 class EventViewSet(viewsets.ModelViewSet):
-    """
-    A viewset for viewing and editing event instances.
-    """
+    """A viewset for viewing and editing event instances."""
+
     serializer_class = EventSerializer
     permission_classes = [EventPermission]
     filterset_class = EventFilter
 
-    # filter_backends = [filters.SearchFilter]
-    # search_fields = ['contract__client__first_name', 'contract__client__last_name', 'contract__client__email', 'event_date']
-
     def get_contract_from_nested_endpoints(self):
+        """To get contract determined by its pk in the endpoint, e.g: clients/client_pk/contracts/contract_pk."""
+
         client = ContractViewSet.get_client_from_nested_endpoints(self)
         contract_pk = self.kwargs["contract_pk"]
         contract = get_object_or_404_error(
@@ -176,7 +171,6 @@ class EventViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Define a set of events that the authenticated user can access."""
         contract = self.get_contract_from_nested_endpoints()
-        # return contract.event
         return Event.objects.filter(pk=contract.pk)  # To have a queryset but not an instance
 
     def create(self, request, *args, **kwargs):

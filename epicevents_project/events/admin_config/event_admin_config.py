@@ -1,3 +1,5 @@
+"""Configuration setup for admin page in order to allow who can access and perform CRUD operators on Event model."""
+
 from django.db.models import Q
 from django.contrib import admin
 from ..models import (
@@ -12,11 +14,15 @@ from ..user_role import (
 
 
 class EventAdminConfig(admin.ModelAdmin):
-    """Sales group can create an event. Only the main seller can delete this event.
-    The seller signs the contract and the main seller can view and update the event.
+    """Set view and CRUD permissions over the Client module for an authenticated user in the admin page.
+    A superuser or a manager has all permissions.
+    Sales group can create an event. Only the main seller can delete this event.
+    The seller signs the contract, the main seller and the supporter of the event can view and update the event.
     """
 
     def get_form(self, request, obj=None, **kwargs):
+        """Allow to disable some fields which should not be modified."""
+
         form = super(EventAdminConfig, self).get_form(request, obj, **kwargs)
 
         if type(obj) is Event:
@@ -39,6 +45,7 @@ class EventAdminConfig(admin.ModelAdmin):
     @superuser_or_manager_permission
     def has_add_permission(self, request):
         """Superuser, member of Managers group or Sellers group can add an event."""
+
         if is_seller(request.user):
             return True
         return False
@@ -46,6 +53,7 @@ class EventAdminConfig(admin.ModelAdmin):
     @superuser_or_manager_permission
     def has_view_permission(self, request, obj=None):
         """A seller or a supporter can see only theirs own events."""
+
         user = request.user
         if obj and type(obj) is Event:
             return obj.is_user_in_sales_contacts_of_event(user) or obj.is_user_in_support_contacts_of_event(user)
@@ -64,7 +72,7 @@ class EventAdminConfig(admin.ModelAdmin):
     @superuser_or_manager_permission
     def has_delete_permission(self, request, obj=None):
         """Superuser, member of Managers group can delete a client.
-        Seller can delete a event if he is the main sales contact.
+        Seller can delete an event if he is the main sales contact.
         """
         if type(obj) is Event:
             return obj.is_user_in_main_sales_contacts_of_event(request.user)
@@ -72,6 +80,9 @@ class EventAdminConfig(admin.ModelAdmin):
 
     @superuser_or_manager_permission
     def has_module_permission(self, request):
+        """Superuser, member of Managers group can see the Event model.
+        Member of Sellers group and Supporters group also can see this.
+        """
         if request.user.groups.filter(name__in=['Sellers', 'Supporters']).exists():
             return True
         return False

@@ -1,4 +1,4 @@
-"""Serializers for model in project tracking app ."""
+"""Serializers for some models: Client, Contract, Event."""
 
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
@@ -26,6 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ClientSerializer(serializers.ModelSerializer):
     """Serializer is used for a client."""
+
     main_sales_contact = UserSerializer(read_only=True)
 
     class Meta:
@@ -37,6 +38,7 @@ class ClientSerializer(serializers.ModelSerializer):
 
 class ContractSerializer(serializers.ModelSerializer):
     """Serializer is used for a contract."""
+
     sales_contact = UserSerializer(read_only=True)  # read_only=True whenever having a foreign key
     client = ClientSerializer(read_only=True)
 
@@ -48,6 +50,7 @@ class ContractSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     """Serializer is used for an event."""
+
     contract = ContractSerializer(read_only=True)  # read_only=True whenever having a foreign key
     support_contact = UserSerializer(read_only=True)
 

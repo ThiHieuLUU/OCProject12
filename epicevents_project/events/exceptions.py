@@ -11,6 +11,8 @@ class UniqueConstraint(APIException):
 
 
 class NotFound(APIException):
+    """Class to generate exceptions for not found object."""
+
     status_code = 404
     default_detail = 'Not found'
     default_code = "error"

@@ -1,3 +1,9 @@
+"""Permission to control actions of authenticated users.
+
+These permissions are shared from admin configuration of each model, which allows to do the same permissions
+from two sides: admin page vs endpoints of api.
+"""
+
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 from .admin import (
     ClientAdminConfig,

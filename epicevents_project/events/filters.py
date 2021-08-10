@@ -1,3 +1,5 @@
+"""Implement the filter for Client, Contract and Event model."""
+
 import django_filters
 from django_filters import CharFilter, NumberFilter, DateTimeFilter
 from .models import (
@@ -9,6 +11,7 @@ from .models import (
 
 class ClientFilter(django_filters.FilterSet):
     """Filters will be used with ClientViewSet."""
+
     first_name_contains = CharFilter(field_name="first_name", lookup_expr='icontains')
     last_name_contains = CharFilter(field_name="last_name", lookup_expr='icontains')
     email_contains = CharFilter(field_name="email", lookup_expr='icontains')
@@ -27,6 +30,7 @@ class ClientFilter(django_filters.FilterSet):
 
 class ContractFilter(django_filters.FilterSet):
     """Filters will be used with ContractViewSet."""
+
     client__first_name_contains = CharFilter(field_name="client__first_name", lookup_expr='icontains')
     client__last_name_contains = CharFilter(field_name="client__last_name", lookup_expr='icontains')
     client__email_contains = CharFilter(field_name="client__email", lookup_expr='icontains')
@@ -56,6 +60,7 @@ class ContractFilter(django_filters.FilterSet):
 
 class EventFilter(django_filters.FilterSet):
     """Filters will be used with EventViewSet."""
+
     client__first_name = CharFilter(field_name="contract_client__first_name")
     client__first_name_contains = CharFilter(field_name="contract_client__first_name", lookup_expr='icontains')
 

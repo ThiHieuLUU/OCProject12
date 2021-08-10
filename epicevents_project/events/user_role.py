@@ -1,3 +1,6 @@
+"""Define some 'shortcut' to ask the role of a user."""
+
+
 def is_seller(user):
     return user.groups.filter(name='Sellers').exists()
 

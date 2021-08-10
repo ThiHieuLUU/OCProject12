@@ -1,3 +1,5 @@
+"""Configuration setup for admin page in order to allow who can access and perform CRUD operators on Contract model."""
+
 from django.db.models import Q
 from django.contrib import admin
 from ..models import (
@@ -12,15 +14,19 @@ from ..user_role import (
 
 
 class ContractAdminConfig(admin.ModelAdmin):
-    """Sales group can create a contract. Only the main seller can delete this contract.
+    """Set view and CRUD permissions over the Client module for an authenticated user in the admin page.
+    A superuser or a manager has all permissions.
+    Sales group can create a contract. Only the main seller can delete this contract.
     The seller signs the contract and the main seller can view and update the contract.
     """
 
     def get_form(self, request, obj=None, **kwargs):
+        """Allow to disable some fields which should not be modified."""
+
         form = super(ContractAdminConfig, self).get_form(request, obj, **kwargs)
 
         if type(obj) is Contract:
-            # In order to update a contract belonging to a client, the client field should not be changed.
+            # In order to update a contract which belongs to a client, the client field should not be changed.
             form.base_fields['client'].disabled = True
         return form
 
@@ -70,6 +76,9 @@ class ContractAdminConfig(admin.ModelAdmin):
 
     @superuser_or_manager_permission
     def has_module_permission(self, request):
-        if request.user.groups.filter(name__in=['Sellers', 'Supporters']).exists():
+        """Superuser, member of Managers group can see the Contract model.
+        Member of Sellers group also can this.
+        """
+        if request.user.groups.filter(name__in=['Sellers']).exists():
             return True
         return False

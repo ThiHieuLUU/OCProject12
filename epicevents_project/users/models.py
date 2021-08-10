@@ -40,7 +40,9 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """User model."""
+    """User model inherits from AbstractBaseUser, PermissionsMixin.
+     With PermissionsMixin, User model has automatically manytomany relationship with Group model.
+     """
 
     username_validator = UnicodeUsernameValidator()
     username = models.CharField(

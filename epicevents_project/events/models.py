@@ -1,3 +1,9 @@
+"""Different models used in events app:
+- Client
+- Contract
+- Event
+"""
+
 from django.contrib.auth import get_user_model
 from django.db import models
 
@@ -6,6 +12,7 @@ User = get_user_model()
 
 class Client(models.Model):
     """Client model"""
+
     first_name = models.CharField(max_length=25, blank=False, null=False)
     last_name = models.CharField(max_length=25, blank=False, null=False)
     email = models.CharField(max_length=100, blank=False, null=False)
@@ -41,6 +48,7 @@ class Client(models.Model):
 
 class Contract(models.Model):
     """ Contract model"""
+
     sales_contact = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False, related_name="contracts")
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, blank=False, related_name="contracts")
     date_created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
@@ -62,11 +70,6 @@ class Contract(models.Model):
 
     def is_user_in_sales_contacts_of_contract(self, user):
         """A contract has one sales_contact (who signs the contract) and one main_sales_contact (related with client)"""
-        # Method 1: takes more time with filter ?
-        # client = self.client
-        # return client.is_user_in_sales_contacts_of_client(self, user)
-
-        # Method 2
         return user == self.sales_contact or user == self.client.main_sales_contact
 
 
