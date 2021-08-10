@@ -1,11 +1,9 @@
 """API Views for different requests about user, project, issue and comment.
 """
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from django.db import IntegrityError
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
 
 from .models import (
     User,
@@ -20,7 +18,8 @@ from .serializers import (
 )
 from .exceptions import UniqueConstraint, get_object_or_404_error
 from .permissions import ClientPermission, ContractPermission, EventPermission
-from .admin import ClientAdminConfig, ContractAdminConfig, EventAdminConfig
+from .admin import ClientAdminConfig
+from .filters import ClientFilter, ContractFilter, EventFilter
 
 
 class ClientViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
@@ -30,8 +29,7 @@ class ClientViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     serializer_class = ClientSerializer
     permission_classes = [ClientPermission]
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['first_name', 'last_name', 'email']
+    filterset_class = ClientFilter
 
     def get_queryset(self):
         """Define a set of clients that the authenticated user can access."""
@@ -82,8 +80,7 @@ class ContractViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     """
     serializer_class = ContractSerializer
     permission_classes = [ContractPermission]
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['client__first_name', 'client__last_name', 'client__email', '=date_created', '=amount']
+    filterset_class = ContractFilter
 
     def get_client_from_nested_endpoints(self):
         clients = ClientViewSet.get_queryset(self)
@@ -159,8 +156,10 @@ class EventViewSet(viewsets.ModelViewSet):
     """
     serializer_class = EventSerializer
     permission_classes = [EventPermission]
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['contract__client__first_name', 'contract__client__last_name', 'contract__client__email', 'event_date']
+    filterset_class = EventFilter
+
+    # filter_backends = [filters.SearchFilter]
+    # search_fields = ['contract__client__first_name', 'contract__client__last_name', 'contract__client__email', 'event_date']
 
     def get_contract_from_nested_endpoints(self):
         client = ContractViewSet.get_client_from_nested_endpoints(self)
