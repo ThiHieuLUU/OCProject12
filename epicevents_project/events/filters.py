@@ -61,24 +61,28 @@ class ContractFilter(django_filters.FilterSet):
 class EventFilter(django_filters.FilterSet):
     """Filters will be used with EventViewSet."""
 
-    client__first_name = CharFilter(field_name="contract_client__first_name")
-    client__first_name_contains = CharFilter(field_name="contract_client__first_name", lookup_expr='icontains')
+    client__first_name = CharFilter(field_name="contract__client__first_name")
+    client__first_name_contains = CharFilter(field_name="contract__client__first_name", lookup_expr='icontains')
 
-    client__last_name_contains = CharFilter(field_name="contract_client__first_name")
-    client__last_name_contains = CharFilter(field_name="contract_client__first_name", lookup_expr='icontains')
+    client__last_name = CharFilter(field_name="contract__client__last_name")
+    client__last_name_contains = CharFilter(field_name="contract__client__last_name", lookup_expr='icontains')
 
-    client__email_contains = CharFilter(field_name="contract_client__first_name")
-    client__email_contains = CharFilter(field_name="contract_client__first_name", lookup_expr='icontains')
-    event_date = DateTimeFilter(field_name='event_date')
+    client__email = CharFilter(field_name="contract__client__email")
+    client__email_contains = CharFilter(field_name="contract__client__email", lookup_expr='icontains')
+
+    event_date_min = DateTimeFilter(field_name='event_date', lookup_expr='gte')
+    event_date_max = DateTimeFilter(field_name='event_date', lookup_expr='lte')
 
     class Meta:
         model = Event
         fields = [
-            # 'client__first_name',
-            # 'client__first_name_contains',
-            # 'client__last_name',
-            # 'client__last_name_contains',
-            # 'client__email',
-            # 'client__email_contains',
-            'event_date'
+            'client__first_name',
+            'client__first_name_contains',
+            'client__last_name',
+            'client__last_name_contains',
+            'client__email',
+            'client__email_contains',
+            'event_date',
+            'event_date_min',
+            'event_date_max'
         ]

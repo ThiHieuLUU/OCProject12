@@ -18,7 +18,7 @@ from .serializers import (
 )
 from .exceptions import UniqueConstraint, get_object_or_404_error
 from .permissions import ClientPermission, ContractPermission, EventPermission
-from .admin import ClientAdminConfig
+from .admin import ClientAdminConfig, ContractAdminConfig, EventAdminConfig
 from .filters import ClientFilter, ContractFilter, EventFilter
 
 
@@ -79,35 +79,22 @@ class ContractViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = [ContractPermission]
     filterset_class = ContractFilter
 
-    def get_client_from_nested_endpoints(self):
-        clients = ClientViewSet.get_queryset(self)
-
-        client_pk = self.kwargs["client_pk"]
-        client = get_object_or_404_error(
-            clients,
-            pk=client_pk,
-            detail=f'Client not found with client_pk = {client_pk} and authenticated user: {self.request.user}'
-        )
-        return client
-
     def get_queryset(self):
         """Define a set of contracts that the authenticated user can access."""
-
-        # Because with drf api, nested endpoints will be used so we can't use all get_queryset functions of admin
-        # return ContractAdminConfig.get_queryset(self, self.request)
-
-        client = self.get_client_from_nested_endpoints()
-        contracts = client.contracts.all()
-        return contracts
+        return ContractAdminConfig.get_queryset(self, self.request)
 
     def create(self, request, *args, **kwargs):
         """Create a contract."""
 
-        # Pop all read-only data
+        # Pop all read-only data, here client and sales contact
         data = request.data
-        data.pop("client", None)  # Don't take into account this information
 
-        client = self.get_client_from_nested_endpoints()  # Also allow to check nested relationship
+        client_data = data.pop("client", None)
+        client = get_object_or_404_error(
+            Client,
+            **client_data,
+            detail="Client not found"
+        )
 
         sales_contact_data = data.pop("sales_contact", None)
         sales_contact = get_object_or_404_error(
@@ -129,8 +116,8 @@ class ContractViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         data = request.data
 
-        # If in the data has "user", pop it.
-        # This field should not be modified because a contract is predetermined to belong to which client.
+        # If in the data has "client", pop it.
+        # This field should not be modified because a contract is predetermined to belong to a unique client.
         data.pop("client", None)
 
         sales_contact_data = data.pop("sales_contact", None)
@@ -154,24 +141,9 @@ class EventViewSet(viewsets.ModelViewSet):
     permission_classes = [EventPermission]
     filterset_class = EventFilter
 
-    def get_contract_from_nested_endpoints(self):
-        """To get contract determined by its pk in the endpoint, e.g: clients/client_pk/contracts/contract_pk."""
-
-        client = ContractViewSet.get_client_from_nested_endpoints(self)
-        contract_pk = self.kwargs["contract_pk"]
-        contract = get_object_or_404_error(
-            Contract,
-            pk=contract_pk,
-            client=client,
-            detail=f'Contract not found with contract_pk = {contract_pk} and client_pk = {client.pk}'
-        )
-        return contract
-
-    # Because with drf api, nested endpoints will be used so we can't use all get_queryset functions of admin
     def get_queryset(self):
         """Define a set of events that the authenticated user can access."""
-        contract = self.get_contract_from_nested_endpoints()
-        return Event.objects.filter(pk=contract.pk)  # To have a queryset but not an instance
+        return EventAdminConfig.get_queryset(self, self.request)
 
     def create(self, request, *args, **kwargs):
         """Create an event."""
@@ -181,8 +153,12 @@ class EventViewSet(viewsets.ModelViewSet):
         # Pop all read-only data
         # If in the data has "contract", pop it.
         # This field should not be modified because a contract signed is determined before making an event.
-        data.pop("contract", None)
-        contract = self.get_contract_from_nested_endpoints()
+        contract_data = data.pop("contract", None)
+        contract = get_object_or_404_error(
+            Contract,
+            **contract_data,
+            detail="Contract not found"
+        )
 
         support_contact_data = data.pop("support_contact", None)
         support_contact = get_object_or_404_error(
