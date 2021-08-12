@@ -62,6 +62,7 @@ class EventFilter(django_filters.FilterSet):
     """Filters will be used with EventViewSet."""
 
     client__first_name = CharFilter(field_name="contract__client__first_name")
+    # client__first_name = CharFilter(field_name="client__first_name")  #To introduce error for sentry
     client__first_name_contains = CharFilter(field_name="contract__client__first_name", lookup_expr='icontains')
 
     client__last_name = CharFilter(field_name="contract__client__last_name")

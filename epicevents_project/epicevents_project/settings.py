@@ -23,7 +23,7 @@ sentry_sdk.init(
 
     # If you wish to associate users to errors (assuming you are using
     # django.contrib.auth) you may enable sending PII data.
-    send_default_pii=True
+    send_default_pii=True,
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,11 +37,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-toua_ai3qkcjgi_5zgo_1-11hjgcxn#!&q#3ps=t1a4n!#**#a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = []
+# DEBUG = True
+# ALLOWED_HOSTS = []
 # To use sentry, set DEBUG = False and ALLOWED_HOSTS = ['127.0.0.1']
-# DEBUG = False
-# ALLOWED_HOSTS = ['127.0.0.1']
+DEBUG = False
+ALLOWED_HOSTS = ['127.0.0.1']
 
 AUTH_USER_MODEL = 'users.User'
 
