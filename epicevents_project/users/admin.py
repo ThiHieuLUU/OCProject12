@@ -42,5 +42,6 @@ class UserAdminConfig(UserAdmin, ModelBackend):
             return True
         return False
 
+
 # Add this configuration to admin site
 admin.site.register(User, UserAdminConfig)
