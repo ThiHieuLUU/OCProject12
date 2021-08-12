@@ -39,6 +39,7 @@ SECRET_KEY = 'django-insecure-toua_ai3qkcjgi_5zgo_1-11hjgcxn#!&q#3ps=t1a4n!#**#a
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 # ALLOWED_HOSTS = []
+
 # To use sentry, set DEBUG = False and ALLOWED_HOSTS = ['127.0.0.1']
 DEBUG = False
 ALLOWED_HOSTS = ['127.0.0.1']
