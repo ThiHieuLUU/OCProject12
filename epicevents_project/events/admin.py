@@ -14,4 +14,3 @@ from .models import (
 admin.site.register(Client, ClientAdminConfig)
 admin.site.register(Contract, ContractAdminConfig)
 admin.site.register(Event, EventAdminConfig)
-

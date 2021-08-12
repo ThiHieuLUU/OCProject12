@@ -62,7 +62,7 @@ class EventAdminConfig(admin.ModelAdmin):
     @superuser_or_manager_permission
     def has_change_permission(self, request, obj=None):
         """Superuser, member of Managers group can modify a event.
-        Seller or supporter can modify an event if he is related to this event (as main sales contact or sales contact).
+        Seller, supporter can modify an event if he is related to this event (as main sales contact or sales contact).
         """
         user = request.user
         if type(obj) is Event:
@@ -86,5 +86,3 @@ class EventAdminConfig(admin.ModelAdmin):
         if request.user.groups.filter(name__in=['Sellers', 'Supporters']).exists():
             return True
         return False
-
-
