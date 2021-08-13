@@ -44,12 +44,7 @@ urlpatterns = [
     ),
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
 
-    path('rest-auth/', include('rest_auth.urls')),
-    path('token/obtain/', jwt_views.TokenObtainPairView.as_view(), name='token_create'),
-    path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
     path('', include('events.urls')),
-    # path('sentry-debug/', trigger_error),
 ]
