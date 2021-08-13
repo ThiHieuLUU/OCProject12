@@ -8,7 +8,8 @@ from rest_auth.views import (
 )
 
 from .views import (
-    UserLoginView
+    UserLoginView,
+    UserLogoutView
 )
 
 app_name = "users"
@@ -18,11 +19,12 @@ urlpatterns = [
     path('token/obtain/', jwt_views.TokenObtainPairView.as_view(), name='token_create'),
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('account/login/', UserLoginView.as_view(), name='login'),
+    path('account/logout/', UserLogoutView.as_view(), name='logout'),
 
     # Include the endpoints from rest_auth
     # URLs that require a user to be logged in with a valid session / token.
     path('account/password/change/', PasswordChangeView.as_view(), name='rest_password_change'),  # Ok
     path('account/password/reset/', PasswordResetView.as_view(), name='rest_password_reset'),
     path('account/password/reset/confirm/', PasswordResetConfirmView.as_view(), name='rest_password_reset_confirm'),
-    path('account/logout/', LogoutView.as_view(), name='rest_logout'),  # Work but after can get data, e.g: /lists/
+    # path('account/logout/', LogoutView.as_view(), name='rest_logout'),  # Work but after can get data, e.g: /lists/
 ]

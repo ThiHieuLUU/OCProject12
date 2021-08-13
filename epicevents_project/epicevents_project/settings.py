@@ -37,12 +37,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-toua_ai3qkcjgi_5zgo_1-11hjgcxn#!&q#3ps=t1a4n!#**#a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = []
+# DEBUG = True
+# ALLOWED_HOSTS = []
 
 # To use sentry, set DEBUG = False and ALLOWED_HOSTS = ['127.0.0.1']
-# DEBUG = False
-# ALLOWED_HOSTS = ['127.0.0.1']
+# Launch server: python manage.py runserver --insecure
+DEBUG = False
+ALLOWED_HOSTS = ['127.0.0.1']
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -60,6 +61,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'drf_yasg',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'users',
     'events',
 ]
@@ -151,8 +153,6 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-REST_USE_JWT = True
-ACCOUNT_LOGOUT_ON_GET = True
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
