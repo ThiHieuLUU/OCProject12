@@ -9,6 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import (
     UserLoginSerializer,
+    RefreshTokenSerializer
 )
 
 
@@ -38,6 +39,9 @@ class UserLoginView(GenericAPIView):
 
 
 class BlacklistTokenUpdateView(GenericAPIView):
+    """When logout is selected, refresh token is set to blacklist."""
+
+    serializer_class = RefreshTokenSerializer
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
@@ -48,4 +52,3 @@ class BlacklistTokenUpdateView(GenericAPIView):
             return Response("Successful logout", status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response("Refresh token is invalid or is blacklisted", status=status.HTTP_400_BAD_REQUEST)
-

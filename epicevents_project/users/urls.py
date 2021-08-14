@@ -9,18 +9,15 @@ from rest_auth.views import (
 
 from .views import (
     UserLoginView,
-    # UserLogoutView,
     BlacklistTokenUpdateView
 )
 
 app_name = "users"
 
-
 urlpatterns = [
     path('token/obtain/', jwt_views.TokenObtainPairView.as_view(), name='token_create'),
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('login/', UserLoginView.as_view(), name='login'),
-    # path('account/logout/', UserLogoutView.as_view(), name='logout'),
     path('logout/blacklist/', BlacklistTokenUpdateView.as_view(), name='blacklist'),
 
     # Include the endpoints from rest_auth
@@ -30,3 +27,4 @@ urlpatterns = [
     path('account/password/reset/confirm/', PasswordResetConfirmView.as_view(), name='rest_password_reset_confirm'),
     # path('account/logout/', LogoutView.as_view(), name='rest_logout'),  # Work but after can get data, e.g: /lists/
 ]
+
