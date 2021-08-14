@@ -9,7 +9,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import (
     UserLoginSerializer,
-    UserLogoutSerializer
 )
 
 
@@ -38,54 +37,15 @@ class UserLoginView(GenericAPIView):
         return Response(response, status=status_code)
 
 
-class UserLogoutView(GenericAPIView):
-    """Views for login process."""
+class BlacklistTokenUpdateView(GenericAPIView):
+    permission_classes = (IsAuthenticated,)
 
-    serializer_class = UserLogoutSerializer
-    permission_classes = (AllowAny,)
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response("Successful logout", status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response("Refresh token is invalid or is blacklisted", status=status.HTTP_400_BAD_REQUEST)
 
-    def post(self, request, format=None):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        status_code = status.HTTP_204_NO_CONTENT
-
-        response = {
-            'success': True,
-            'statusCode': status_code,
-            'message': 'User logged out successfully',
-            # 'access': serializer.data['access'],
-            # 'refresh': serializer.data['refresh'],
-            'authenticatedUser': {
-                'username': self.request.user.username,
-            }
-        }
-
-        return Response(response, status=status_code)
-
-# class UserLogoutView(GenericAPIView):
-#     """Views for logout process."""
-#     serializer_class = UserLogoutSerializer
-#     permission_classes = (AllowAny, )
-#
-#     def post(self, request, format=None):
-#         try:
-#             refresh_token = request.data["refresh_token"]
-#             token = RefreshToken(refresh_token)
-#             token.blacklist()
-#
-#             return Response(status=status.HTTP_205_RESET_CONTENT)
-#         except Exception:
-#             return Response(status=status.HTTP_400_BAD_REQUEST)
-#
-
-# class UserLogoutView(GenericAPIView):
-#     serializer_class = UserLogoutSerializer
-#
-#     permission_classes = (IsAuthenticated,)
-#
-#     def post(self, request):
-#         serializer = self.serializer_class(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#
-#         return Response(status=status.HTTP_204_NO_CONTENT)

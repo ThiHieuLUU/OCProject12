@@ -53,4 +53,5 @@ firefox flake8-report/index.html &
 ```
 
 ## 6. Postman documentation
-See [here](https://www.postman.com/crimson-capsule-423643/workspace/project12) for Postman documentation of this API.
+See [here](https://www.postman.com/crimson-capsule-423643/workspace/project12-jwt-auth) for Postman documentation. 
+This is shown with logout by using blacklist of in Simple JWT.

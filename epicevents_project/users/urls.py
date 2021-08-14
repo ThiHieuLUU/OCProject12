@@ -9,7 +9,8 @@ from rest_auth.views import (
 
 from .views import (
     UserLoginView,
-    UserLogoutView
+    # UserLogoutView,
+    BlacklistTokenUpdateView
 )
 
 app_name = "users"
@@ -18,8 +19,9 @@ app_name = "users"
 urlpatterns = [
     path('token/obtain/', jwt_views.TokenObtainPairView.as_view(), name='token_create'),
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('account/login/', UserLoginView.as_view(), name='login'),
-    path('account/logout/', UserLogoutView.as_view(), name='logout'),
+    path('login/', UserLoginView.as_view(), name='login'),
+    # path('account/logout/', UserLogoutView.as_view(), name='logout'),
+    path('logout/blacklist/', BlacklistTokenUpdateView.as_view(), name='blacklist'),
 
     # Include the endpoints from rest_auth
     # URLs that require a user to be logged in with a valid session / token.
